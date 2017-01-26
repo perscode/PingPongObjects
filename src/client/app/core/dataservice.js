@@ -27,6 +27,7 @@
             }
 
             function isadmin(){
+                //return $q.when(true);
                 return deferred.promise;
             }
 

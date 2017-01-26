@@ -5,11 +5,12 @@
         .module('app.match')
         .controller('MatchController', MatchController);
 
-        MatchController.$inject = ['shellservice', '_', '$location','$http', '$rootScope'];
+        MatchController.$inject = ['shellservice', '_', '$location','$http', '$rootScope', '$timeout'];
         //shellservice
 
-        function MatchController(shellservice, _, $location, $http,$rootScope){
+        function MatchController(shellservice, _, $location, $http,$rootScope,$timeout){
             var vm = this;
+            $rootScope.isadmin = true;
             vm.view = { active: "create"};
             vm.selectPlayer = selectPlayer;
             vm.removePlayer = removePlayer;
@@ -34,7 +35,9 @@
                     vm.error = false;
                     console.log("getting them players: ", res.data);
                     vm.players = res.data;
-
+                    _.each(vm.players, function(p){
+                        p.selected = false;
+                    });
                 }).catch(function(err){
                     console.log("err fetching players", err);
                 });
@@ -57,14 +60,30 @@
             }
 
             function selectPlayer(p){
-                if((vm.newmatch[p._id] && vm.newmatch[p._id] !== "") || vm.contenders.length === 2){
-                    return;
-                }
-                vm.newmatch[p._id] = p.name;
-                vm.contenders.push({name: p.name, id: p._id, elo:p.elo});
-                if(vm.contenders.length === 2){
-                    vm.twoselected = true;
-                    getEloOutcome({players: [vm.contenders[0].id, vm.contenders[1].id]});
+                p.selected = !p.selected;
+                
+                if(p.selected){
+                    var newopp = {name: p.name, id: p._id, elo:p.elo};
+                    vm.newmatch[p._id] = p.name;
+                    if(vm.contenders.length === 2){
+                        var lastadded = vm.contenders[1];
+                        var playerindex = _.findIndex(vm.players, {_id: lastadded.id});
+                        vm.players[playerindex].selected = false;
+                        vm.newmatch[lastadded.id] = {};
+                        vm.contenders[1] = newopp;
+                    }else{
+                        vm.contenders.push(newopp);
+                    }
+                    if(vm.contenders.length === 2){
+                        vm.twoselected = true;
+                        getEloOutcome({players: [vm.contenders[0].id, vm.contenders[1].id]});
+                    }
+                }else {
+                    vm.newmatch[p.id] = {};
+                    vm.twoselected = false;
+                    var index = _.findIndex(vm.contenders, {id: p._id});
+                    vm.contenders.splice(index, 1);
+                    
                 }
             }
 
@@ -88,6 +107,7 @@
 
             function regWinner(p){
                 var looser = {};
+                vm.winner = p;
                 var index = "";
                 if(vm.contenders[0].id === p.id){
                      index = 1
@@ -100,6 +120,9 @@
                     lost: looser,
                     won: p
                 }
+                _.each(vm.players, function(player){
+                    player.selected = false;
+                });
                 console.log("data: ", data);
                 var config = {
                     url: "/api/matches",
@@ -108,8 +131,12 @@
                 };
                 return $http(config).then(function(res){
                     updateView(res);
-                    vm.contenders = [];
-                    vm.newmatch = {};
+                    $timeout(function(){
+                        vm.contenders = [];
+                        vm.newmatch = {};
+                        vm.winner = {};
+                    }, 1000);
+
                 }).catch(function(err){
                     console.log("err", err);
                 });

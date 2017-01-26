@@ -13,7 +13,7 @@
             vm.goto = goto;
 
             activate();
-
+            
             function activate(){
                 vm.isbusy = true;
                 vm.tabs = [
@@ -21,13 +21,11 @@
                     {name: "Matches", url: "/matches", selected: false}
                 ];
                 vm.isbusy = false;
-                return dataservice.isadmin().then(function(res){
-                    
+                dataservice.isadmin().then(function(res){
                     if(res){
                         vm.tabs.push({name: "Players", url: "/players", selected: false});
                     }
                 });
-                
             }
 
             function goto(url, index){

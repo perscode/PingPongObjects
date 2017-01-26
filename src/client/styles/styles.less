@@ -58,7 +58,12 @@ a:active {
 	text-decoration: none;
 }
 
-
+.player-selected {
+    color: lightgreen;
+}
+.black-font {
+    color:black;
+}
 
 .space10 {
 	height: 10px;
@@ -113,4 +118,86 @@ a:active {
 th, td {
 	color: @color_txt !important;
     border: 1px solid white;
+}
+
+//tournament brackets
+main{
+  display:flex;
+  flex-direction:row;
+}
+.round{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  width:200px;
+  list-style:none;
+  padding:0;
+}
+  .round .spacer{ flex-grow:1; }
+  .round .spacer:first-child,
+  .round .spacer:last-child{ flex-grow:.5; }
+
+  .round .game-spacer{
+    flex-grow:1;
+  }
+
+/*
+ *  General Styles
+*/
+body{
+  font-family:sans-serif;
+  font-size:small;
+  padding:10px;
+  line-height:1.4em;
+}
+
+li.game{
+  padding-left:20px;
+}
+
+  li.game.winner{
+    font-weight:bold;
+  }
+  li.game span{
+    float:right;
+    margin-right:5px;
+  }
+
+  li.game-top{ border-bottom:1px solid #aaa; }
+
+  li.game-spacer{ 
+    border-right:1px solid #aaa;
+    min-height:40px;
+  }
+
+  li.game-bottom{ 
+    border-top:1px solid #aaa;
+  }
+
+  //
+ ul {
+  list-style-type: none;
+}
+p{
+    font: black;
+}
+  a.btn-defat.bracket{
+    background: #222;
+    border: 1px white solid;
+    height: 30px;
+    margin-top: 4px;
+    color: white;
+    font-size: 90%;
+    width: 195px;
+  }
+  a.btn-defat.bracket:hover {
+      background: green;
+  }
+  
+  .btn-arrow:after {
+    font-family: 'FontAwesome';
+    // content: '\f054';
+    color: white;
+    padding-left: 55px;
+    position: relative;
 }

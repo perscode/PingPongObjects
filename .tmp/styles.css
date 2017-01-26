@@ -1,0 +1,198 @@
+@font-face {
+  font-family: 'HeadLineFont';
+  src: url('../fonts/Bariol_Light.otf');
+}
+body {
+  background: #222;
+  color: #ddd;
+  font-family: "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+.bg-light {
+  background-color: #fff;
+}
+h1 {
+  font-weight: 200;
+  margin: 40px 0;
+  font-size: 4rem;
+  text-shadow: 2px 3px 0px #000000;
+}
+h2 {
+  font-weight: 200;
+  margin-bottom: 30px;
+  color: #9f9f9f;
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.6rem;
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+h3.title {
+  font-size: 2.5rem;
+}
+h4 {
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+h5 {
+  font-size: 14px;
+  font-weight: 300;
+  color: #999;
+}
+h5.speaker-title {
+  height: 50px;
+}
+a:hover,
+a:focus,
+a:active {
+  text-decoration: none;
+}
+.player-selected {
+  color: lightgreen;
+}
+.black-font {
+  color: black;
+}
+.space10 {
+  height: 10px;
+  width: 100%;
+  clear: both;
+}
+.space20 {
+  height: 20px;
+  width: 100%;
+  clear: both;
+}
+.space50 {
+  height: 50px;
+  width: 100%;
+  clear: both;
+}
+.padding-xl {
+  padding-top: 100px;
+}
+.padding-lg {
+  padding-top: 75px;
+}
+.padding-md {
+  padding-top: 50px;
+}
+.padding-sm {
+  padding-top: 25px;
+}
+.padding-xs {
+  padding-top: 15px;
+}
+.logo {
+  width: 300px;
+  margin: 0 auto;
+}
+.thead-inverse th {
+  background-color: #333;
+}
+.table td,
+.table th {
+  border-top: 1px solid #777;
+  padding: 15px;
+}
+.table thead th {
+  border-bottom: 1px solid #777;
+}
+th,
+td {
+  color: #ddd !important;
+  border: 1px solid white;
+}
+main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+.round {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 200px;
+  list-style: none;
+  padding: 0;
+}
+.round .spacer {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+.round .spacer:first-child,
+.round .spacer:last-child {
+  -webkit-box-flex: .5;
+      -ms-flex-positive: .5;
+          flex-grow: .5;
+}
+.round .game-spacer {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+/*
+ *  General Styles
+*/
+body {
+  font-family: sans-serif;
+  font-size: small;
+  padding: 10px;
+  line-height: 1.4em;
+}
+li.game {
+  padding-left: 20px;
+}
+li.game.winner {
+  font-weight: bold;
+}
+li.game span {
+  float: right;
+  margin-right: 5px;
+}
+li.game-top {
+  border-bottom: 1px solid #aaa;
+}
+li.game-spacer {
+  border-right: 1px solid #aaa;
+  min-height: 40px;
+}
+li.game-bottom {
+  border-top: 1px solid #aaa;
+}
+ul {
+  list-style-type: none;
+}
+p {
+  font: black;
+}
+a.btn-defat.bracket {
+  background: #222;
+  border: 1px white solid;
+  height: 30px;
+  margin-top: 4px;
+  color: white;
+  font-size: 90%;
+  width: 195px;
+}
+a.btn-defat.bracket:hover {
+  background: green;
+}
+.btn-arrow:after {
+  font-family: 'FontAwesome';
+  color: white;
+  padding-left: 55px;
+  position: relative;
+}

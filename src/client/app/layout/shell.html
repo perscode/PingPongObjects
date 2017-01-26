@@ -1,9 +1,9 @@
 <div ng-controller="ShellController as vm">
     <div class="container padding-md">
-		<div class="col-xl-12 text-xs-center">
+		<div class="col-xl-12 text-center">
 			<img class="logo" src="./images/ping-pong-championship.png" alt="" />
             <div class="row" ng-hide="vm.isbusy">
-                <div class="col-lg-4" ng-repeat="tab in vm.tabs track by $index">
+                <div ng-class="{'col-xs-4': isadmin, 'col-xs-6': !isadmin" ng-repeat="tab in vm.tabs track by $index">
                     <a href="" ng-click="vm.goto(tab.url, $index)"> <h1 ng-class="{'selected': tab.selected, '': !tab.selected}">{{tab.name}}</h1></a>
                 </div>
             </div>

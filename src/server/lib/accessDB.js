@@ -95,28 +95,29 @@ module.exports = {
     eloOutcome: function(query, callback){
         var players = query;
         var players = [];
-        var players = {p1: {}, p2: {}};
+        //var players = {p1: {}, p2: {}};
         var elo = new Elo();
-        Player.find({_id: query.players[0]}, function(err, res){
+        Player.find({_id: query.players[0]}).exec(function(err, res){
             var p1 = JSON.parse(JSON.stringify(res[0]));
             console.log("p1 result: ", p1);
             players[0] = p1;
-            
-        });
-        Player.find({_id: query.players[1]}, function(err, res){
-            var p2 = JSON.parse(JSON.stringify(res[0]));
-            console.log("p2 result: ", p2);
-            players[1] = p2;
-        }).exec(function(err, data){
-            console.log("players: ", players);
-            var new_elo = {p1: elo.newRatingIfWon(players[0].elo, players[1].elo), p2: elo.newRatingIfWon(players[1].elo, players[0].elo)};
-            var elo_lost = {p1: elo.newRatingIfLost(players[0].elo, players[1].elo), p2: elo.newRatingIfLost(players[1].elo, players[0].elo)};
-            var odds_p1 = elo.expectedScore(players[0].elo, players[1].elo);
-            var odds_p2 = elo.expectedScore(players[1].elo, players[0].elo);
-            var response = {};
-            response[players[0]._id] = {old_elo: players[0].elo, if_win: new_elo.p1, odds: odds_p1, if_loose: elo_lost.p1};
-            response[players[1]._id] = {old_elo: players[1].elo, if_win: new_elo.p2, odds: odds_p2, if_loose: elo_lost.p2};
-            callback(null, response);
+        
+            Player.find({_id: query.players[1]}).exec(function(err, res){
+                var p2 = JSON.parse(JSON.stringify(res[0]));
+                console.log("p2 result: ", p2);
+                players[1] = p2;
+                console.log("players: ", players);
+                var response = {};
+                if(players[1] && players[0] ){
+                    var new_elo = {p1: elo.newRatingIfWon(players[0].elo, players[1].elo), p2: elo.newRatingIfWon(players[1].elo, players[0].elo)};
+                    var elo_lost = {p1: elo.newRatingIfLost(players[0].elo, players[1].elo), p2: elo.newRatingIfLost(players[1].elo, players[0].elo)};
+                    var odds_p1 = elo.expectedScore(players[0].elo, players[1].elo);
+                    var odds_p2 = elo.expectedScore(players[1].elo, players[0].elo);
+                    response[players[0]._id] = {old_elo: players[0].elo, if_win: new_elo.p1, odds: odds_p1, if_loose: elo_lost.p1};
+                    response[players[1]._id] = {old_elo: players[1].elo, if_win: new_elo.p2, odds: odds_p2, if_loose: elo_lost.p2};
+                }
+                callback(null, response);
+            });
         });
         
     },

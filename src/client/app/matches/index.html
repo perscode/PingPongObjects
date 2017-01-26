@@ -1,10 +1,20 @@
+<script type="text/ng-template" id="player0.html">
+    <p>Elo if won: {{vm.contenders[0].win}} </p><p> Elo if lost: {{vm.contenders[0].lost}}</p>
+    <div class="form-group">
+    </div>
+</script>
+<script type="text/ng-template" id="player1.html">
+    <p>Elo if won: {{vm.contenders[1].win}} </p><p> Elo if lost: {{vm.contenders[1].lost}}</p>
+    <div class="form-group">
+    </div>
+</script>
 <div class="btn-group" role="group" aria-label="...">
     <button type="button" class="btn btn-default" ng-class="{'active': vm.view.active==='create'}" ng-click="vm.view.active='create'">New Match</button>
     <button type="button" class="btn btn-default" ng-class="{'active': vm.view.active==='view'}" ng-click="vm.view.active='view'">View Match</button>
 </div>
 
 <div ng-show="vm.view.active==='create'&&isadmin">
-    <ul class="list-group">
+    <!--<ul class="list-group">
         <div ng-if="vm.error">
             <button ng-click="vm.getPlayers()">Reload view</button>
         </div>
@@ -14,26 +24,101 @@
                 <i class="fa fa-times" ng-if="vm.newmatch[player._id]" aria-hidden="true" ng-click="vm.removePlayer(player)"></i>
             </a>
         </li>
-    </ul>
-    
-    <table ng-if="vm.contenders.length > 0">
-        <tr>
-            <th>Name</th>
-            <th>Current ELO</th>
-            <th ng-if="vm.contenders[0].loose">ELO if win</th>
-            <th ng-if="vm.contenders[0].win">ELO if loosing</th>
-            <th ng-if="vm.contenders[0].odds">Odds of winning</th>
-        </tr>
-        <tr ng-repeat="p in vm.contenders track by $index">
-            <td>{{p.name}}</td>
-            <td>{{p.elo}}</td>
-            <td>{{p.win}}</td>
-            <td>{{p.loose}}</td>
-            <td ng-if="vm.contenders[0].odds">{{p.odds | number: 2}}%</td>
-            <td><button class="btn btn-success" ng-click="vm.regWinner(p)">register winner</button><td>
-        </tr>
-    </table>
-    
+    </ul>-->
+    <div class="space50"></div>
+    <div ng-if="vm.error">
+        <button ng-click="vm.getPlayers()">Reload view</button>
+    </div>
+    <div class="col-xs-12 text-xs-center">
+        <div class="col-xs-5 text-xs-center" style="border-right:1px white dashed;height:200px">
+            <!--<div class="col-xs-4 text-xs-center">-->
+                <h3>1) Select two opponents</h3>
+                <ul>
+                    <li ng-repeat="p in vm.players | orderBy: '-elo'">
+                        <a href="#" class="bracket btn-arrow" role="button" ng-click="vm.selectPlayer(p)">
+                            <span ng-class="{'player-selected': p.selected, '': !p.selected}">
+                            {{p.name}}
+                        </a>
+                            <span class="pull-right">{{p.elo}}</span>
+                            </span>                        
+                    </li>
+                </ul>
+            <!--</div>-->
+
+        </div>
+        <div class="col-xs-2"></div>
+        <div class="col-xs-5 text-xs-center" style="border-left:1px white dashed;height:200px">        
+            <h3 ng-if="vm.contenders.length === 2">2) Select the winner</h3> 
+            <main id="tournament" ng-if="vm.contenders.length > 0">
+                <ul class="round round-1">
+                    <li class="spacer">&nbsp;</li>
+                    
+                    <li class="game game-top winner" ng-click="vm.regWinner(vm.contenders[0])">
+                        <span ng-if="vm.contenders[0]" uib-popover-template="player0.html" popover-trigger="'mouseenter'">
+                            <a href="#" class="bracket btn-arrow" ng-click="winner=vm.contenders[0]">
+                                <span class="pull-left">
+                                    {{vm.contenders[0].name}}
+                                </span>
+                                <span class="pull-right" >
+                                    {{vm.contenders[0].odds*100 | number: 2}}%  <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                        </span>
+                    </li>
+                    <li class="game game-spacer">&nbsp;</li>
+                    <li class="game game-bottom" ng-click="vm.regWinner(vm.contenders[1])"> 
+                        <span ng-if="vm.contenders[1]">
+                            <a href="#" class="bracket btn-arrow" ng-click="winner=vm.contenders[1]">
+                                <span class="pull-left">
+                                    {{vm.contenders[1].name}}
+                                </span>
+                                <span class="pull-right">
+                                    {{vm.contenders[1].odds*100 | number: 2}}%  <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                        </span>
+                    </li>
+                    <li class="spacer">&nbsp;</li>
+                </ul>
+                <ul class="round round-2">
+                    <li class="spacer">&nbsp;</li>
+                    
+                    <li class="game game-top winner" ng-if="vm.winner">{{vm.winner.name}} <span>{{vm.winner.win}}</span></li>
+                    
+                    <li class="spacer">&nbsp;</li>
+                </ul>
+            </main>
+
+        </div>        
+    </div>
+    <div class="space50"></div>
+    <div class="col-xs-12">
+        <span class="col-xs-3 text-center">
+            <p></p>
+        </span>
+        <div class="col-xs-6 text-center">
+            <table ng-if="vm.contenders.length > 0">
+                <tr>
+                    <th>Name</th>
+                    <th>Current ELO</th>
+                    <th ng-if="vm.contenders[0].loose">ELO if win</th>
+                    <th ng-if="vm.contenders[0].win">ELO if loosing</th>
+                    <th ng-if="vm.contenders[0].odds">Odds of winning</th>
+                </tr>
+                <tr ng-repeat="p in vm.contenders track by $index">
+                    <td>{{p.name}}</td>
+                    <td>{{p.elo}}</td>
+                    <td>{{p.win}}</td>
+                    <td>{{p.loose}}</td>
+                    <td ng-if="vm.contenders[0].odds">{{p.odds | number: 2}}%</td>
+                    <!--<td><button class="btn btn-success" ng-click="vm.regWinner(p)">register winner</button><td>-->
+                </tr>
+            </table>
+        </div>
+        <span class="col-xs-3 text-xs-center">
+        </span>        
+    </div>
+    <div class="space50"></div>
 </div>
 
 <div ng-show="vm.view.active==='view'||!isadmin">
