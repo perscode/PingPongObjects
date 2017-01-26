@@ -10,7 +10,6 @@
 
         function MatchController(shellservice, _, $location, $http,$rootScope,$timeout){
             var vm = this;
-            $rootScope.isadmin = true;
             vm.view = { active: "create"};
             vm.selectPlayer = selectPlayer;
             vm.removePlayer = removePlayer;
