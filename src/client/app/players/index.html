@@ -1,0 +1,11 @@
+<button href="" type="button" style="background-color:#9f9f9f;" ng-click="vm.view.active='add'">Add player </button>
+<button href="" type="button" style="background-color:#9f9f9f;" ng-click="vm.view.active='modify'">Show players </button>
+
+<div ng-show="vm.view.active==='add'">
+    Name: <input ng-model="name" type="text"><br>
+    <a href="" ng-click="vm.add(name)">Submit</a>
+</div>
+
+<div ng-show="vm.view.active==='modify'">
+    Name: <input ng-model="vm.player.name">
+</div>

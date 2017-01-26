@@ -1,0 +1,25 @@
+		<div class="col-xl-12">
+			<table class="table">
+				<thead class="thead-inverse">
+					<tr>
+						<th>#</th>
+						<th>Name</th>
+						<th>Wins</th>
+						<th>Losses</th>
+						<th>Games</th>
+                        <th>ELO</th>
+					</tr>
+				</thead>
+				<tbody>
+                    <tr ng-repeat="player in vm.players track by $index">
+						<th scope="row">x</th>
+						<td>{{player.name}}</td>
+						<td>{{player.wins}}</td>
+						<td>{{player.losses}}</td>
+						<td>{{player.total}}</td>
+                        <td>{{player.elo}}</td>
+                        <td ng-if="isadmin"><a href="" ng-click="vm.update(player)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>

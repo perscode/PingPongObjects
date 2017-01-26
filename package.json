@@ -1,0 +1,47 @@
+{
+  "name": "administration",
+  "version": "1.0.0",
+  "description": "Administration",
+  "dependencies": {
+    "arpad": "^1.0.1",
+    "body-parser": "^1.15.1",
+    "compression": "^1.6.2",
+    "cors": "^2.7.1",
+    "express": "^4.13.4",
+    "lodash": "^4.16.2",
+    "lodash.set": "^4.3.2",
+    "lodash.uniq": "^4.5.0",
+    "mongoose": "^4.7.5",
+    "morgan": "^1.7.0",
+    "oidc-client-node": "^1.0.10",
+    "request": "^2.79.0",
+    "serve-favicon": "^2.3.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "browser-sync": "~2.11.2",
+    "del": "^2.2.0",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-if": "^2.0.1",
+    "gulp-imagemin": "^3.0.1",
+    "gulp-inject": "^4.1.0",
+    "gulp-jshint": "^2.0.1",
+    "gulp-less": "^3.1.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-load-plugins": "^1.2.2",
+    "gulp-nodemon": "^2.0.7",
+    "gulp-plumber": "^1.1.0",
+    "gulp-print": "^2.0.1",
+    "gulp-task-listing": "^1.0.1",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.5",
+    "jshint": "^2.9.2",
+    "jshint-stylish": "^2.2.0",
+    "wiredep": "^4.0.0",
+    "yargs": "^4.7.1"
+  },
+  "author": "Per Johansson, Johan Dyrssen",
+  "license": "ISC"
+}

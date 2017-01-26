@@ -1,0 +1,46 @@
+<div class="btn-group" role="group" aria-label="...">
+    <button type="button" class="btn btn-default" ng-class="{'active': vm.view.active==='create'}" ng-click="vm.view.active='create'">New Match</button>
+    <button type="button" class="btn btn-default" ng-class="{'active': vm.view.active==='view'}" ng-click="vm.view.active='view'">View Match</button>
+</div>
+
+<div ng-show="vm.view.active==='create'&&isadmin">
+    <ul class="list-group">
+        <div ng-if="vm.error">
+            <button ng-click="vm.getPlayers()">Reload view</button>
+        </div>
+        <li class="list-group-item" ng-repeat="player in vm.players">
+            <a>
+                <div ng-click="vm.selectPlayer(player)">{{player.name}}  ----   elo: {{player.elo}}</div>
+                <i class="fa fa-times" ng-if="vm.newmatch[player._id]" aria-hidden="true" ng-click="vm.removePlayer(player)"></i>
+            </a>
+        </li>
+    </ul>
+    
+    <table ng-if="vm.contenders.length > 0">
+        <tr>
+            <th>Name</th>
+            <th>Current ELO</th>
+            <th ng-if="vm.contenders[0].loose">ELO if win</th>
+            <th ng-if="vm.contenders[0].win">ELO if loosing</th>
+            <th ng-if="vm.contenders[0].odds">Odds of winning</th>
+        </tr>
+        <tr ng-repeat="p in vm.contenders track by $index">
+            <td>{{p.name}}</td>
+            <td>{{p.elo}}</td>
+            <td>{{p.win}}</td>
+            <td>{{p.loose}}</td>
+            <td ng-if="vm.contenders[0].odds">{{p.odds | number: 2}}%</td>
+            <td><button class="btn btn-success" ng-click="vm.regWinner(p)">register winner</button><td>
+        </tr>
+    </table>
+    
+</div>
+
+<div ng-show="vm.view.active==='view'||!isadmin">
+    <div ng-repeat="match in vm.matches">{{match.player1.name}} vs. {{match.player2.name}} <br> winner: {{match.winner.name}}<br><br></div>
+    <img src="../images/under_const.gif">
+    <img src="../images/under_const.gif">
+    <img src="../images/under_const.gif">
+    <img src="../images/under_const.gif">
+</div>
+
