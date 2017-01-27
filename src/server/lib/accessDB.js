@@ -14,6 +14,7 @@ var set = require('lodash.set');
 var uniq = require('lodash.uniq');
 var Promise = require('bluebird');
 var Elo = require('arpad');
+var findindex = require('lodash.findindex')
 //var isMatch = require('lodash.isMatch');
 // connect to database
 module.exports = {
@@ -38,6 +39,42 @@ module.exports = {
             console.log('Mongoose default connection disconnected through app termination');
             process.exit(0);
         });
+    },
+    getPlayer: function(id, callback){
+        console.log("getPlayer id: ", id);
+        Player.findOne({_id: id}, function(err, player){
+            if(err){
+                return callback(err);
+            }
+            callback(null, player);
+        });
+    },
+    getPlayerPos: function(id, callback){
+        console.log("getPlayer id: ", id);
+        Player
+            .find({}, {'elo': 1})
+            .sort({elo: -1})
+            .exec(function(err, players){
+                if(err){
+                    return callback(err);
+                }
+                var arr = JSON.parse(JSON.stringify(players));
+                var index = findindex(arr, {_id: id});
+                var playerelo = arr[index].elo;
+                var sharedcount = 0;
+                console.log("players: ", players);
+                var pos = 0;
+                
+                for(var i = 0; i<arr.length; i++){
+                    if(arr[i]._id.toString() === id) {
+                        pos = i;
+                    }
+                    if(playerelo === arr[i].elo){
+                        sharedcount++;
+                    }
+                }
+                callback(null, {pos: pos, sharedby: sharedcount});
+            });
     },
     getPlayerSummary: function(callback){
         Player.count(function(err, custsCount) {
@@ -125,8 +162,10 @@ module.exports = {
         var response = {};
         var match = new Match();
         match.winner = query.won.id;
+        match.regby = query.ip;
         var matchref = "";
         match.players = [{name: query.won.name, id: query.won.id}, {name: query.lost.name, id: query.lost.id}];
+
         match.save(function(err, match, effected){
             console.log("err: ", err, "match: ", match, "effected: ", effected);
             matchref = match._id;

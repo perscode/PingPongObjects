@@ -5,24 +5,49 @@
         .module('app.match')
         .controller('MatchController', MatchController);
 
-        MatchController.$inject = ['shellservice', '_', '$location','$http', '$rootScope', '$timeout'];
-        //shellservice
+        MatchController.$inject = ['_', '$location','$http', 'dataservice', '$timeout', '$q'];
 
-        function MatchController(shellservice, _, $location, $http,$rootScope,$timeout){
+        function MatchController(_, $location, $http,dataservice,$timeout, $q){
             var vm = this;
+            var counterActive = false;
+            var deferred = $q.defer();
             vm.view = { active: "create"};
             vm.selectPlayer = selectPlayer;
             vm.removePlayer = removePlayer;
             vm.newmatch = {};
             vm.regWinner = regWinner;
             vm.contenders = [];
+            vm.timer = 3;
             vm.getPlayers = getPlayers;
             vm.twoselected = false;
             activate();
 
             function activate(){
-                getPlayers();
-                getMatches();
+                return dataservice.isadmin().then(function(res){
+                    vm.isadmin = res;
+                    getPlayers();
+                    getMatches();
+                });
+            }
+
+            function startcountdown(){
+                
+                
+//                if(counterActive){
+                vm.countdown = $timeout(function(){
+                    console.log(vm.timer);
+                    vm.timer--;
+                    if(vm.timer<1){
+                        //counterActive = false;
+                        deferred.resolve(vm.timer);
+                    }else{
+                        startcountdown();
+                    }
+                }, 1000);
+            }
+
+            function wait(){
+                return deferred.promise;
             }
 
             function getPlayers(){
@@ -52,7 +77,6 @@
                         var tmp = {player1: val.players[0], player2: val.players[1], date: val.date, winner: winner};
                         vm.matches.push(tmp);
                     });
-
                 }).catch(function(err){
                     console.log("err fetching players", err);
                 });
@@ -130,11 +154,14 @@
                 };
                 return $http(config).then(function(res){
                     updateView(res);
-                    $timeout(function(){
-                        vm.contenders = [];
-                        vm.newmatch = {};
-                        vm.winner = {};
-                    }, 1000);
+                    counterActive = true;
+                    startcountdown();
+                    return wait().then(function(res){
+                        $location.url("/highscore");
+                    });
+                    // $timeout(function(){
+                    //     $location.url('/highscore');
+                    // }, 1000);
 
                 }).catch(function(err){
                     console.log("err", err);

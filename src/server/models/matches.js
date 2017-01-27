@@ -6,6 +6,7 @@ var Player = require('./player');
 var matchSchema = Schema({
     players: [Schema.Types.Mixed],
     winner: {type: String},
+    regby: String,
     date: {type: Date, default: Date.now }
 });
 var Match = mongoose.model('Match', matchSchema); 

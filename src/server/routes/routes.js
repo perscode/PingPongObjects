@@ -8,6 +8,7 @@ var _ = require('lodash/core');
 //router.get('/fix', fix);
 router.get('/players', getPlayers);
 router.get('/players/:id', getPlayer);
+router.get('/players/:id/pos', getPlayerPos);
 router.get('/matches', getMatches);
 router.post('/players', addPlayer);
 router.post('/matches', addMatch);
@@ -60,8 +61,9 @@ function getMatches(req, res, next){
     }); 
 }
 function getPlayer(req, res, next){
-    db.getPlayer(query, function (err, data) {
-        res.setHeader('X-InlineCount', data.count);
+    var id = req.params.id;
+    console.log("routes: query: ", id);
+    db.getPlayer(id, function (err, data) {
         if (err) {
             console.log('*** palyers err');
             res.json({
@@ -72,6 +74,21 @@ function getPlayer(req, res, next){
             res.json(data);
         }
     });    
+}
+function getPlayerPos(req, res, next){
+    var id = req.params.id;
+    console.log("routes: query: ", id);
+    db.getPlayerPos(id, function (err, data) {
+        if (err) {
+            console.log('*** palyers err');
+            res.json({
+                err: err
+            });
+        } else {
+            //console.log('*** products ok', data.products);
+            res.json(data);
+        }
+    });        
 }
 function addPlayer(req, res, next){
     var query = req.body;
@@ -89,7 +106,9 @@ function addPlayer(req, res, next){
     });    
 }
 function addMatch(req, res, next){
+    var ip = require("ip");
     var query = req.body;
+    query.ip = ip.address();
     db.addMatchResults(query, function (err, data) {
         if (err) {
             console.log('*** addmatch err');

@@ -13,16 +13,28 @@
         .when("/highscore", {
             templateUrl : "app/highscore/index.html",
             controller: "HighscoreController",
-            controllerAs: "vm"
+            controllerAs: "vm",
+            resolve: {
+                isadmin: ['$rootScope', 'dataservice', function($rootScope,dataservice){
+                    if(!$rootScope.isadmin){
+                        dataservice.setadmin(false);
+                        return false;
+                    }
+                    return true;
+                }]
+            }
         })
-        .when("/players", {
+        .when("/players/:id", {
             templateUrl : "app/players/index.html",
             controller: "PlayerController",
             controllerAs: "vm",
             resolve: {
-                isadmin: ['$rootScope', '$location', function($rootScope,$location){
-                    if(!$rootScope.isadmin){
+                isadmin: ['$rootScope', '$location','dataservice', function($rootScope,$location,dataservice){
+                    if($location.search() === {modify: 'true'} && !$rootScope.isadmin){
                         $location.path("/highscore");
+                    }else if(!$rootScope.isadmin){
+                        dataservice.setadmin(false);
+                        return false;
                     }
                 }]
             }
@@ -30,7 +42,16 @@
         .when("/matches", {
             templateUrl : "app/matches/index.html",
             controller: "MatchController",
-            controllerAs: "vm"
+            controllerAs: "vm",
+            resolve: {
+                isadmin: ['$rootScope','dataservice', function($rootScope,dataservice){
+                    if(!$rootScope.isadmin){
+                        dataservice.setadmin(false);
+                        return false;
+                    }
+                    return true;
+                }]
+            }
         })
         .when("/admin", {
             template: "",
@@ -38,6 +59,7 @@
                 $rootScope.isadmin = true;
                 dataservice.setadmin(true);
                 $location.path("/highscore");
+                return "";
             }]
         });
         

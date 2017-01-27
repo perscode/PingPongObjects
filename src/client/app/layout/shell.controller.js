@@ -21,12 +21,6 @@
                     {name: "Matches", url: "/matches", selected: false}
                 ];
                 vm.isbusy = false;
-                dataservice.isadmin().then(function(res) {
-                    if(res){
-                        vm.isadmin = true;
-                        vm.tabs.push({name: "Players", url: "/players", selected: false});
-                    }
-                });
             }
 
             function goto(url, index) {

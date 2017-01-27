@@ -10,7 +10,8 @@
 
         function HighscoreController(_, $http, $location, dataservice){
             var vm = this;
-            vm.update = update;
+            vm.view = view;
+            vm.modify = modify;
             vm.filtering = {};
             activate();
 
@@ -26,9 +27,18 @@
                 });
             }
 
-            function update(player){
+            function modify(player){
                 dataservice.setplayer(player);
-                $location.url("/players", player);
+                $location.url("/players?modify=true", player);
+            }
+
+            function view(player, $index){
+                var p = player;
+                var rating = 10-$index;
+                if(rating < 1) { rating = 1;}
+                p.rating = rating;
+                dataservice.setplayer(player);
+                $location.url("/players/"+p._id, player);
             }
         }
 })();

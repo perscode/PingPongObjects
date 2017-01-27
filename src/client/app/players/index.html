@@ -1,4 +1,23 @@
-<button href="" type="button" style="background-color:#9f9f9f;" ng-click="vm.view.active='add'">Add player </button>
+<div ng-if="vm.ready">
+    <div class="space50"></div>
+  <uib-tabset active="active" class="text-center">
+    <uib-tab index="$index + 1" ng-repeat="tab in vm.tabs" heading="{{tab.title}}" disable="tab.disabled">
+        <div ng-if="tab.title==='view'">
+            <uib-tab-heading>
+                <i class="{{content.icon}}"></i>
+            </uib-tab-heading>
+            <view-player content="tab"></view-player>
+        </div>
+        <div ng-if="tab.title==='modify'">
+            <uib-tab-heading>
+                <i class="{{content.icon}}"></i> 
+            </uib-tab-heading>            
+            <modify-player content="tab"></modify-player>
+        </div>        
+    </uib-tab>
+  </uib-tabset>
+  </div>
+<!--<button href="" type="button" style="background-color:#9f9f9f;" ng-click="vm.view.active='add'">Add player </button>
 <button href="" type="button" style="background-color:#9f9f9f;" ng-click="vm.view.active='modify'">Show players </button>
 
 <div ng-show="vm.view.active==='add'">
@@ -8,4 +27,4 @@
 
 <div ng-show="vm.view.active==='modify'">
     Name: <input ng-model="vm.player.name">
-</div>
+</div>-->

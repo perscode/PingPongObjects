@@ -98,9 +98,11 @@ a:active {
 .table thead th {
   border-bottom: 1px solid #777;
 }
+.table-striped {
+  color: #777;
+}
 th,
 td {
-  color: #ddd !important;
   border: 1px solid white;
 }
 main {
@@ -195,4 +197,13 @@ a.btn-defat.bracket:hover {
   color: white;
   padding-left: 55px;
   position: relative;
+}
+.moreThanThousand {
+  color: #00cc66;
+}
+.lessThanThousand {
+  color: #cc3300;
+}
+.exactlyThousand {
+  color: inherit;
 }

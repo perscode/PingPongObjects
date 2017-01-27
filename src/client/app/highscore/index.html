@@ -12,13 +12,13 @@
 				</thead>
 				<tbody>
                     <tr ng-repeat="player in vm.players track by $index">
-						<th scope="row">x</th>
-						<td>{{player.name}}</td>
+                        <th scope="row">{{$index+1}}</th>
+                        <td ng-click="vm.view(player, $index)"><a href="">{{player.name}}</a></td>
 						<td>{{player.wins}}</td>
 						<td>{{player.losses}}</td>
 						<td>{{player.total}}</td>
                         <td ng-class="{ 'moreThanThousand': player.elo > 1000, 'exactlyThousand': player.elo == 1000, 'lessThanThousand': player.elo < 1000 }">{{player.elo}}</td>
-                        <td ng-if="isadmin"><a href="" ng-click="vm.update(player)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+                        <td ng-if="isadmin"><a href="" ng-click="vm.modify(player)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
 					</tr>
 				</tbody>
 			</table>
