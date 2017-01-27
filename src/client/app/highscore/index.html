@@ -17,7 +17,7 @@
 						<td>{{player.wins}}</td>
 						<td>{{player.losses}}</td>
 						<td>{{player.total}}</td>
-                        <td>{{player.elo}}</td>
+                        <td ng-class="{ 'moreThanThousand': player.elo > 1000, 'exactlyThousand': player.elo == 1000, 'lessThanThousand': player.elo < 1000 }">{{player.elo}}</td>
                         <td ng-if="isadmin"><a href="" ng-click="vm.update(player)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
 					</tr>
 				</tbody>
