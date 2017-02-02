@@ -2,21 +2,27 @@
     <div class="space50"></div>
   <uib-tabset active="active" class="text-center">
     <uib-tab index="$index + 1" ng-repeat="tab in vm.tabs" heading="{{tab.title}}" disable="tab.disabled">
-        <div ng-if="tab.title==='view'">
+        <div ng-if="tab.title==='details'">
             <uib-tab-heading>
-                <i class="{{content.icon}}"></i>
+                <i class="{{content.icon}}" aria-hidden="true"></i>
             </uib-tab-heading>
             <view-player content="tab"></view-player>
         </div>
+        <div ng-if="tab.title==='matches'">
+            <uib-tab-heading>
+                <i class="{{content.icon}}" aria-hidden="true"></i>
+            </uib-tab-heading>
+            <matches-player content="tab"></matches-player>
+        </div>        
         <div ng-if="tab.title==='modify'">
             <uib-tab-heading>
-                <i class="{{content.icon}}"></i> 
-            </uib-tab-heading>            
+                <i class="{{content.icon}}" aria-hidden="true"></i>
+            </uib-tab-heading>
             <modify-player content="tab"></modify-player>
-        </div>        
+        </div>
     </uib-tab>
   </uib-tabset>
-  </div>
+</div>
 <!--<button href="" type="button" style="background-color:#9f9f9f;" ng-click="vm.view.active='add'">Add player </button>
 <button href="" type="button" style="background-color:#9f9f9f;" ng-click="vm.view.active='modify'">Show players </button>
 

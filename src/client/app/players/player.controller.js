@@ -10,37 +10,46 @@
         function PlayerController(_, playerservice, dataservice,$location,$sce){
             var vm = this;
             vm.add = add;
-            vm.view = {active: "modify"};
+            vm.view = {active: "details"};
 
 
             activate();
 
             function activate(){
-                return dataservice.getplayer().then(function(res){
-                    console.log("getplayer: ", res);
-                    vm.player = res;
-                    vm.tabs = [
-                        {
-                            title: "view",
-                            icon: 'glyphicon glyphicon-eye-open',
-                            disabled: false,
-                            player: vm.player
-                            //template: cleanhtml('view')
-                        },
-                        {
-                            title: "modify",
-                            icon: 'glyphicon glyphicon-pencil',
-                            disabled: dataservice.isadmin().then(function(res){
-                                return res;
-                            }),
-                            player: vm.player
-                            //template: cleanhtml('modify')
-                        }
-                        
-                    ];
-                    vm.hideplayers = true;
-                    vm.addplayer = true;
-                    vm.ready = true;                 
+                return dataservice.isadmin().then(function(res){
+                    vm.isadmin = res;
+                    return dataservice.getplayer().then(function(res){
+                        console.log("getplayer: ", res);
+                        vm.player = res;
+                        //vm.player.matches = res.matches;
+                        vm.tabs = [
+                            {
+                                title: "details",
+                                icon: 'fa fa-eye',
+                                disabled: false,
+                                player: vm.player
+                                //template: cleanhtml('view')
+                            },
+                            {
+                                title: "matches",
+                                icon: 'fa fa-object-group',
+                                disabled: false,
+                                player: vm.player
+                                //template: cleanhtml('view')
+                            },
+                            {
+                                title: "modify",
+                                icon: 'fa fa-pencil-square-o',
+                                disabled: !vm.isadmin,
+                                player: vm.player
+                                //template: cleanhtml('modify')
+                            }
+                            
+                        ];
+                        vm.hideplayers = true;
+                        vm.addplayer = true;
+                        vm.ready = true;
+                    });
                 });
             }
 

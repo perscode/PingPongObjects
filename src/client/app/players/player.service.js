@@ -29,7 +29,6 @@
                     console.log("err adding new player: ", err);
                 });
             }
-
             return service;
         }
 })();

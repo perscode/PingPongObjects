@@ -24,6 +24,7 @@
                     pos = 1;
                 }
                 vm.firstname = vm.content.player.name.split(" ")[0];
+                vm.lastname = vm.content.player.name.split(" ")[1];
                 console.log("vm.stars: ", pos); 
                 vm.stars = pos;
                 console.log("vm.stars: ", vm.stars);  

@@ -14,7 +14,10 @@ var set = require('lodash.set');
 var uniq = require('lodash.uniq');
 var Promise = require('bluebird');
 var Elo = require('arpad');
-var findindex = require('lodash.findindex')
+var findindex = require('lodash.findindex');
+var isarray = require('lodash.isarray');
+var each = require('lodash.foreach');
+var isnumber = require('lodash.isnumber');
 //var isMatch = require('lodash.isMatch');
 // connect to database
 module.exports = {
@@ -46,8 +49,40 @@ module.exports = {
             if(err){
                 return callback(err);
             }
-            callback(null, player);
+            
+            Match
+                .find({"_id": { $in: player.matches.map(mongoose.Types.ObjectId)} })
+                .exec(function(err, matches){
+                    if(err){
+                        console.log("err fetching player matches: ", err);
+                        return callback(err);
+                    }
+                    var matchlist = [];
+                    each(matches, function(m){
+                        var tmp = {
+                            won: JSON.parse(JSON.stringify(m.won)),
+                            lost: JSON.parse(JSON.stringify(m.lost))
+                        };
+                        matchlist.push(tmp);
+                    });
+                    var p = {
+                        _id: player._id,
+                        name: player.name,
+                        elo: player.elo,
+                        wins: player.wins,
+                        losses: player.losses,
+                        total: player.total,
+                        matches: matchlist,
+                        quote: player.quote,
+                        nickname: player.nickname
+                    };
+                    //p.matches = matchlist;
+                    
+                    callback(null, p);
+                });
+                //callback(null, player);
         });
+
     },
     getPlayerPos: function(id, callback){
         console.log("getPlayer id: ", id);
@@ -81,14 +116,13 @@ module.exports = {
             if(err){
                 callback(err);
             }
-            Player.find({}, { '_id': 1, 'name': 1, 'elo': 1, 'wins': 1, 'losses': 1, 'total': 1})
+            Player.find({}, { '_id': 1, 'name': 1, 'elo': 1, 'wins': 1, 'losses': 1, 'total': 1, 'quote': 1, 'nickname': 1})
                 .sort({elo: -1})
                 .exec(function(err, res){
                     if(err){
-                        callback(err);
+                        console.log("err: ", err);
+                        return callback(err);
                     }
-                    console.log("err: ", err);
-                    console.log("post player.find(): ", res);
                     callback(null, res);
             });
         });
@@ -98,14 +132,14 @@ module.exports = {
             if(err){
                 callback(err);
             }
-            Match.find({}, { '_id': 1, 'players': 1, 'winner': 1, 'date': 1})
+            Match.find({}, { '_id': 1, 'won': 1, 'lost': 1, 'date': 1})
                 .sort({date: -1})
                 .exec(function(err, res){
                     if(err){
                         console.log("err: ", err);
-                        callback(err);
+                        return callback(err);
                     }
-                    console.log("post player.find(): ", res);
+                    //console.log("post player.find(): ", res);
                     callback(null, res);
             });
         });
@@ -127,6 +161,47 @@ module.exports = {
             }
             console.log("may have worked. doc: ", doc);
             callback(null, doc);
+        });
+    },
+    addPlayerNickname: function(query, callback){
+        console.log("addPlayerNickname query: ", query);
+        Player.findOne({_id: query.id}, function(err, player){
+            if(err){
+                return callback(err);
+            }
+            player.nickname = query.nickname;
+            player.markModified('nickname');
+            player.save(function(err, num, doc){
+                callback(null, doc);
+            });
+        });
+    },
+    fullwipe: function(callback){
+        Player.update({}, 
+        { 
+            elo: 1000,
+            wins: 0,
+            losses: 0,
+            nickname: "",
+            quote: "",
+            total: 0,
+            matches: []
+        }, {multi:true}, 
+        function(err, num) {
+            Match.remove({}, callback)                
+        });
+    },
+    addPlayerQuote: function(query, callback){
+        console.log("addPlayerQuote query: ", query);
+        Player.findOne({_id: query.id}, function(err, player){
+            if(err){
+                return callback(err);
+            }
+            player.quote = query.quote;
+            player.markModified('quote');
+            player.save(function(err, num, doc){
+                callback(null, doc);
+            });
         });
     },
     eloOutcome: function(query, callback){
@@ -161,37 +236,46 @@ module.exports = {
     addMatchResults: function(query, callback){
         var response = {};
         var match = new Match();
-        match.winner = query.won.id;
+        match.won = {name: query.won.name, id: query.won.id, change: (query.won.win-query.won.elo)};
+        match.lost = {name: query.lost.name, id: query.lost.id, change: (query.lost.loose-query.lost.elo)};
         match.regby = query.ip;
         var matchref = "";
-        match.players = [{name: query.won.name, id: query.won.id}, {name: query.lost.name, id: query.lost.id}];
+        console.log("query.lost: ", query.lost);
 
         match.save(function(err, match, effected){
             console.log("err: ", err, "match: ", match, "effected: ", effected);
             matchref = match._id;
             console.log("matchref: ", matchref);
-        });
-        Player.findOne({_id: query.won.id}, function(err, p1){
-            p1.elo = query.won.win;
-            p1.wins += 1;
-            p1.total += 1;
-            p1.matches.push(matchref);
-            p1.markModified('elo');
-            p1.markModified('wins');
-            p1.markModified('total');
-            response[p1._id] = p1;
-            p1.save(function(err, player, numaffected){
-                Player.findOne({_id: query.lost.id}, function(err, p2){
-                    p2.elo = query.lost.loose;
-                    p2.losses += 1;
-                    p2.total += 1;
-                    p2.matches.push(matchref);
-                    p2.markModified('elo');
-                    p2.markModified('losses');
-                    p2.markModified('total');           
-                    response[p2._id] = p2;
-                    p2.save(function(err, player, numaffected){
-                        callback(null, response);                        
+
+            Player.findOne({_id: query.won.id}).exec(function(err, p1){
+                p1.elo = query.won.win;
+                p1.wins++;
+                p1.total++;
+                p1.matches.push(matchref);
+                p1.markModified('elo');
+                p1.markModified('wins');
+                p1.markModified('total');
+                response[p1._id] = p1;
+                p1.save(function(err, player, numaffected){
+                    if(err){
+                        return callback(err);
+                    }
+                    console.log("numeffected: ", numaffected);
+                    Player.findOne({_id: query.lost.id}).exec(function(err, p2){
+                        p2.elo = query.lost.loose;
+                        p2.losses++;
+                        p2.total++;
+                        p2.matches.push(matchref);
+                        p2.markModified('elo');
+                        p2.markModified('losses');
+                        p2.markModified('total');           
+                        response[p2._id] = p2;
+                        p2.save(function(err, player, numaffected){
+                            if(err){
+                                return callback(err);
+                            }                        
+                            callback(null, response);                        
+                        });
                     });
                 });
             });

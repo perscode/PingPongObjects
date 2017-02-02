@@ -11,8 +11,11 @@ router.get('/players/:id', getPlayer);
 router.get('/players/:id/pos', getPlayerPos);
 router.get('/matches', getMatches);
 router.post('/players', addPlayer);
+router.post('/players/:id/quote', addQuote);
+router.post('/players/:id/nickname', addNickname);
 router.post('/matches', addMatch);
-router.get('/elo', getEloOutcome)
+router.get('/elo', getEloOutcome);
+router.get('/wipeallstats', wipeallstats);
 router.get('/*', four0four.notFoundMiddleware);
  
 
@@ -27,10 +30,57 @@ function getPlayers(req, res, next) {
                 err: err
             });
         } else {
-            console.log('*** players ok', data);
             res.status(200).json(data);
         }
     });    
+}
+
+function wipeallstats(req, res, next){
+    db.fullwipe(function (err, data) {
+        if (err) {
+            console.log('*** wipeallstats err');
+            res.json({
+                err: err
+            });
+        } else {
+            res.json(data);
+        }
+    });
+}
+
+function addQuote(req, res, next){
+    var query = {
+        id: req.params.id,
+        quote: req.body.quote
+    };
+    db.addPlayerQuote(query, function (err, data) {
+        if (err) {
+            console.log('*** palyers err');
+            res.json({
+                err: err
+            });
+        } else {
+            //console.log('*** products ok', data.products);
+            res.json(data);
+        }
+    });   
+}
+function addNickname(req, res, next){
+    var query = {
+        id: req.params.id,
+        nickname: req.body.nickname
+    };
+    db.addPlayerNickname(query, function (err, data) {
+        if (err) {
+            console.log('*** palyers err');
+            res.json({
+                err: err
+            });
+        } else {
+            //console.log('*** products ok', data.products);
+            res.json(data);
+        }
+    });
 }
 function getEloOutcome(req, res, next){
     var query = req.query;
@@ -88,7 +138,7 @@ function getPlayerPos(req, res, next){
             //console.log('*** products ok', data.products);
             res.json(data);
         }
-    });        
+    });     
 }
 function addPlayer(req, res, next){
     var query = req.body;

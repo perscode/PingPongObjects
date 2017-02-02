@@ -1,1 +1,35 @@
-great content that modifies stuff
+<div class="col-xs-12 text-xs-center">
+    <div class="col-xs-3 text-xs-center">
+    </div>
+    <div class="col-xs-6 text-xs-center">
+        <p>
+            <h3>{{vm.player.name}}</h3>
+        </p>
+
+
+        <uib-accordion close-others="oneAtATime">
+            <div uib-accordion-group class="panel-default" is-open="status.quoteIsOpen">
+                <uib-accordion-heading>
+                    Player Quote <i class="fa fa-angle-right" aria-hidden="true" ng-class="{'fa fa-angle-up': status.status.quoteIsOpen, 'fa fa-angle-right': !status.status.quoteIsOpen}"></i>
+                </uib-accordion-heading>        
+                <div class="form-group">
+                    <label><span ng-if="!vm.player.quote">This player has no quote</span> {{vm.player.quote}}</label>
+                    <input type="text" ng-model="vm.player.quote" class="form-control">
+                </div>
+                <button class="btn btn-default" ng-click="vm.addQuote(vm.player.quote)">save quote</button>
+            </div>
+            <div uib-accordion-group class="panel-default" is-open="status.nickIsOpen">
+                <uib-accordion-heading>
+                    Player Nickname <i class="fa fa-angle-right" aria-hidden="true" ng-class="{'fa fa-angle-up': status.nickIsOpen, 'fa fa-angle-right': !status.nickIsOpen}"></i>
+                </uib-accordion-heading>
+                <div class="form-group">
+                    <label><span ng-if="!vm.player.nickname">This player has no nickname</span> {{vm.player.nickname}}</label>
+                    <input type="text" ng-model="vm.player.nickname" class="form-control">
+                </div>
+                <button type="button" class="btn btn-default btn-sm" ng-click="vm.addNickname(vm.player.nickname)">save</button>
+            </div>
+        </uib-accordion>
+    </div>        
+    <div class="col-xs-3 text-xs-center">
+    </div>
+</div>

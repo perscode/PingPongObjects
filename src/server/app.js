@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var port = process.env.PORT || 8001;
+//var reload = require('reload');
 var four0four = require('./utils/404')();
 var environment = process.env.NODE_ENV;
 var DB = require('./lib/accessDB');

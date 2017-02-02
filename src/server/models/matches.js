@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
+mongoose.set('debug', true);
 var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
-var Player = require('./player');
   
 var matchSchema = Schema({
-    players: [Schema.Types.Mixed],
-    winner: {type: String},
+    won: Schema.Types.Mixed,
+    lost: Schema.Types.Mixed,
     regby: String,
     date: {type: Date, default: Date.now }
 });

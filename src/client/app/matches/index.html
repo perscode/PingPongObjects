@@ -9,145 +9,147 @@
     </div>
 </script>-->
 <div class="space50"></div>
-<uib-tabset active="active" class="text-center">
-    <uib-tab index="$index + 1">
-        <uib-tab-heading>
-            <i class="{{content.icon}}"></i>list
-        </uib-tab-heading>
-        
-        <!--
-            Tab 1 Content
-        -->
-<div class="row">
-    <div ng-repeat="match in vm.matches">
-        <div class="clearfix space50" ng-if="$index % 3 == 0"></div>
-        <div class="col-sm-4">
-            <div class="w3-card-4">
-                <header class="w3-container w3-light-grey">
-                    {{match.date | date : format : timezone}}
-                </header>
 
-                <div class="w3-container">
-                    <br>
-                    <p><b>Winner</b> - {{match.winner.name}}</p>
-                    <hr>
-                    <img src="/images/rackets.png" height="42" width="42" alt="Avatar" class="w3-left w3-circle">
-                    <p>{{match.player1.name}} vs. {{match.player2.name}}</p>
+    <uib-tabset active="active" class="text-center">
+        <uib-tab index="$index + 1">
+            <uib-tab-heading>
+                <i class="{{content.icon}}"></i>list
+            </uib-tab-heading>
+            
+            <!--
+                Tab 1 Content
+            -->
+            <div class="row">
+                <div ng-if="vm.matches.length === 0">
+                    <h3>No matches has been played yet</h3>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>        
+                <div ng-repeat="match in vm.matches">
+                    <div class="clearfix space50" ng-if="$index % 3 == 0"></div>
+                    <div class="col-sm-4">
+                        <div class="w3-card-4">
+                            <header class="w3-container w3-light-grey">
+                                {{match.date | date : format : timezone}}
+                            </header>
 
-
-        <!--<img src="../images/under_const.gif">
-        <img src="../images/under_const.gif">
-        <img src="../images/under_const.gif">
-        <img src="../images/under_const.gif">-->
-    </uib-tab>
-    <uib-tab disable="!vm.isadmin">
-        <uib-tab-heading>
-            new match
-        </uib-tab-heading>
-        <!--
-            Tab 2 Content
-        -->        
-        <div class="space50"></div>
-        <div ng-if="vm.error">
-            <button ng-click="vm.getPlayers()">Reload view</button>
-        </div>
-        <div class="col-xs-12 text-xs-center">
-            <div class="col-xs-5 text-xs-center" style="border-right:1px white dashed;height:200px">
-                <h3>1) Select two opponents</h3>
-                <ul>
-                    <li ng-repeat="p in vm.players | orderBy: '-elo'">
-                        <a href="#" class="bracket btn-arrow" role="button" ng-click="vm.selectPlayer(p)">
-                            <span ng-class="{'player-selected': p.selected, '': !p.selected}">
-                                {{p.name}}
-                            </span>
-                        </a>
-                        <span class="pull-right">{{p.elo}}</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-xs-2">
-                <span ng-if="vm.countdown">
-                    Redirect to Highscore
-                    <h2>{{vm.timer}}</h2>
-                </span>
-            </div>
-            <div class="col-xs-5 text-xs-center" style="border-left:1px white dashed;height:200px">        
-                <h3 ng-if="vm.contenders.length === 2">2) Select the winner</h3> 
-                <main id="tournament" ng-if="vm.contenders.length > 0">
-                    <ul class="round round-1">
-                        <li class="spacer">&nbsp;</li>
-                        
-                        <li class="game game-top winner" ng-click="vm.regWinner(vm.contenders[0])">
-                            <span ng-if="vm.contenders[0]" uib-popover-template="player0.html" popover-trigger="'mouseenter'">
-                                <a href="#" class="bracket btn-arrow" ng-click="winner=vm.contenders[0]">
-                                    <span class="pull-left">
-                                        {{vm.contenders[0].name}}
-                                    </span>
-                                    <span class="pull-right" >
-                                        {{vm.contenders[0].odds*100 | number: 2}}%  <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                                    </span>
-                                </a>
-                            </span>
-                        </li>
-                        <li class="game game-spacer">&nbsp;</li>
-                        <li class="game game-bottom" ng-click="vm.regWinner(vm.contenders[1])"> 
-                            <span ng-if="vm.contenders[1]">
-                                <a href="#" class="bracket btn-arrow" ng-click="winner=vm.contenders[1]">
-                                    <span class="pull-left">
-                                        {{vm.contenders[1].name}}
-                                    </span>
-                                    <span class="pull-right">
-                                        {{vm.contenders[1].odds*100 | number: 2}}%  <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                                    </span>
-                                </a>
-                            </span>
-                        </li>
-                        <li class="spacer">&nbsp;</li>
-                    </ul>
-                    <ul class="round round-2">
-                        <li class="spacer">&nbsp;</li>
-                        
-                        <li class="game game-top winner" ng-if="vm.winner">{{vm.winner.name}} <span>{{vm.winner.win}}</span></li>
-                        
-                        <li class="spacer">&nbsp;</li>
-                    </ul>
-                </main>
+                            <div class="w3-container">
+                                <br>
+                                <p><b>Winner</b> - {{match.won.name}} <span style="color:green">(+{{match.won.change}})</span></p>
+                                <hr>
+                                <img src="/images/rackets.png" height="42" width="42" alt="Avatar" class="w3-left w3-circle">
+                                <p>{{match.won.name}} </p>
+                                <p>vs. </p>
+                                <p>{{match.lost.name}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>        
-        </div>
-        <div class="space50"></div>
-        <div class="space50"></div>
-        <div class="space50"></div>
-        <div class="col-xs-12">
-            <span class="col-xs-3 text-center">
-                <p></p>
-            </span>
-            <div class="col-xs-6 text-center">
-                <table ng-if="vm.contenders.length > 0">
-                    <tr>
-                        <th>Name</th>
-                        <th>Current ELO</th>
-                        <th ng-if="vm.contenders[0].loose">ELO if win</th>
-                        <th ng-if="vm.contenders[0].win">ELO if loosing</th>
-                        <th ng-if="vm.contenders[0].odds">Odds of winning</th>
-                    </tr>
-                    <tr ng-repeat="p in vm.contenders track by $index">
-                        <td>{{p.name}}</td>
-                        <td>{{p.elo}}</td>
-                        <td>{{p.win}}</td>
-                        <td>{{p.loose}}</td>
-                        <td ng-if="vm.contenders[0].odds">{{p.odds | number: 2}}%</td>
-                        <!--<td><button class="btn btn-success" ng-click="vm.regWinner(p)">register winner</button><td>-->
-                    </tr>
-                </table>
+        </uib-tab>
+        <uib-tab disable="!vm.isadmin">
+            <uib-tab-heading>
+                new match
+            </uib-tab-heading>
+            <!--
+                Tab 2 Content
+            -->        
+            <div class="space50"></div>
+            <div ng-if="vm.error">
+                <button ng-click="vm.getPlayers()">Reload view</button>
             </div>
-            <span class="col-xs-3 text-xs-center">
-            </span>        
-        </div>
-        <div class="space50"></div>
-    </uib-tab>
-</uib-tabset>
+            <div class="container">
+                <div class="col-xs-12 text-xs-center">
+                    <div class="col-xs-5 text-xs-center" style="border-right:1px white dashed;height:200px">
+                        <h3>1) Select two opponents</h3>
+                        <ul>
+                            <li ng-repeat="p in vm.players | orderBy: '-elo'">
+                                <a href="#" class="bracket btn-arrow" role="button" ng-click="vm.selectPlayer(p)">
+                                    <span ng-class="{'player-selected': p.selected, '': !p.selected}">
+                                        {{p.name}}
+                                    </span>
+                                </a>
+                                <span class="pull-right">{{p.elo}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-2">
+                        <span ng-if="vm.countdown">
+                            Redirect to Highscore
+                            <h2>{{vm.timer}}</h2>
+                        </span>
+                    </div>
+                    <div class="col-xs-5 text-xs-center clearfix" style="border-left:1px white dashed;height:200px">        
+                        <h3 ng-if="vm.contenders.length === 2">2) Select the winner</h3> 
+                        <main id="tournament" ng-if="vm.contenders.length > 0">
+                            <ul class="round round-1">
+                                <li class="spacer">&nbsp;</li>
+                                
+                                <li class="game game-top winner" ng-click="vm.regWinner(vm.contenders[0])">
+                                    <span ng-if="vm.contenders[0]" uib-popover-template="player0.html" popover-trigger="'mouseenter'">
+                                        <a href="#" class="bracket btn-arrow" ng-click="winner=vm.contenders[0]">
+                                            <span class="pull-left">
+                                                {{vm.contenders[0].name}}
+                                            </span>
+                                            <span class="pull-right" >
+                                                {{vm.contenders[0].odds*100 | number: 2}}%  <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                            </span>
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="game game-spacer">&nbsp;</li>
+                                <li class="game game-bottom"> 
+                                    <span ng-if="vm.contenders[1]&&!vm.counterActive" ng-click="vm.regWinner(vm.contenders[1])">
+                                        <a href="#" class="bracket btn-arrow" ng-click="winner=vm.contenders[1]">
+                                            <span class="pull-left">
+                                                {{vm.contenders[1].name}}
+                                            </span>
+                                            <span class="pull-right">
+                                                {{vm.contenders[1].odds*100 | number: 2}}%  <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                            </span>
+                                        </a>
+                                    </span>
+                                </li>
+                                <li class="spacer">&nbsp;</li>
+                            </ul>
+                            <ul class="round round-2">
+                                <li class="spacer">&nbsp;</li>
+                                
+                                <li class="game game-top winner" ng-if="vm.winner">{{vm.winner.name}} <span>{{vm.winner.win}}</span></li>
+                                
+                                <li class="spacer">&nbsp;</li>
+                            </ul>
+                        </main>
+                    </div>        
+                </div>
+                <div class="space50"></div>
+                <div class="space50"></div>
+                <div class="space50"></div>
+                <div class="col-xs-12">
+                    <div class="col-xs-3">
+                        <p></p>
+                    </div>
+                    <div class="col-xs-6">
+                        <table class="table" ng-if="vm.contenders.length > 0">
+                            <tr>
+                                <th>Name</th>
+                                <th>Current ELO</th>
+                                <th ng-if="vm.contenders[0].loose">ELO if win</th>
+                                <th ng-if="vm.contenders[0].win">ELO if loosing</th>
+                                <th ng-if="vm.contenders[0].odds">Odds of winning</th>
+                            </tr>
+                            <tr ng-repeat="p in vm.contenders track by $index">
+                                <td>{{p.name}}</td>
+                                <td>{{p.elo}}</td>
+                                <td>{{p.win}}</td>
+                                <td>{{p.loose}}</td>
+                                <td ng-if="vm.contenders[0].odds">{{p.odds | number: 2}}%</td>
+                                <!--<td><button class="btn btn-success" ng-click="vm.regWinner(p)">register winner</button><td>-->
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-3">
+                    </div>        
+                </div>
+                <div class="space50"></div>
+            </div>
+        </uib-tab>
+    </uib-tabset>

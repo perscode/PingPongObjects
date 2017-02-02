@@ -1,0 +1,40 @@
+<div class="row">
+    <div ng-if="vm.matches.length === 0">
+        <h3>No matches has been played yet</h3>
+    </div>
+    <div ng-repeat="match in vm.matches">
+        <div class="clearfix space50" ng-if="$index % 3 == 0"></div>
+        <div class="col-sm-4">
+            <div class="w3-card-4">
+                <header class="w3-container w3-light-grey">
+                    {{match.date | date : format : timezone}}
+                </header>
+
+                <div class="w3-container">
+                    <br>
+                    <div ng-if="vm.playerid===match.won.id">
+                        <p><b>Won </b><span style="color:green"> (+{{match.won.change}})</span></p>
+                        <hr>
+                        <img src="/images/rackets.png" height="42" width="42" alt="Avatar" class="w3-left w3-circle">
+                        <div class="text-center">
+                            <p>{{match.won.name}} </p>
+                            <p>vs. </p>
+                            <p>{{match.lost.name}}</p>
+                        </div>
+                    </div>
+                    <div ng-if="vm.playerid===match.lost.id" class="text-center">
+                        <p><b>Lost </b> <span style="color:red">(-{{match.lost.change}})</span></p>
+                        <hr>
+                        <img src="/images/rackets.png" height="42" width="42" alt="Avatar" class="w3-left w3-circle">
+                        <div class="text-center">
+                            <p>{{match.won.name}} </p>
+                            <p>vs. </p>
+                            <p>{{match.lost.name}}</p>
+                        </div>
+                    </div>                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>     

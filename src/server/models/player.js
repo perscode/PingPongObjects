@@ -1,8 +1,6 @@
 var mongoose = require('mongoose');
 mongoose.set('debug', true);
-var Match = require('./matches');
 var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
   
 var playerSchema = new Schema({
     name: {
@@ -13,6 +11,8 @@ var playerSchema = new Schema({
     },
     wins: Number,
     losses: Number,
+    nickname: String,
+    quote: String,
     total: Number,
     matches: [String]
 });

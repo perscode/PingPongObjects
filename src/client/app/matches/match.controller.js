@@ -9,7 +9,7 @@
 
         function MatchController(_, $location, $http,dataservice,$timeout, $q){
             var vm = this;
-            var counterActive = false;
+            vm.counterActive = false;
             var deferred = $q.defer();
             vm.view = { active: "create"};
             vm.selectPlayer = selectPlayer;
@@ -33,12 +33,12 @@
             function startcountdown(){
                 
                 
-//                if(counterActive){
+//                if(vm.counterActive){
                 vm.countdown = $timeout(function(){
                     console.log(vm.timer);
                     vm.timer--;
                     if(vm.timer<1){
-                        //counterActive = false;
+                        //vm.counterActive = false;
                         deferred.resolve(vm.timer);
                     }else{
                         startcountdown();
@@ -72,9 +72,9 @@
                     console.log("get matches: ", res.data);
                     vm.matches = [];
                     _.forEach(res.data, function(val, key){
-                        var index = _.findIndex(val.players, {id: val.winner});
-                        var winner = val.players[index];
-                        var tmp = {player1: val.players[0], player2: val.players[1], date: val.date, winner: winner};
+                        var won = val.won;
+                        var lost = val.lost;
+                        var tmp = {lost: lost, date: val.date, won: won};
                         vm.matches.push(tmp);
                     });
                 }).catch(function(err){
@@ -129,6 +129,9 @@
             }
 
             function regWinner(p){
+                if(vm.counterActive){
+                    return;
+                }
                 var looser = {};
                 vm.winner = p;
                 var index = "";
@@ -154,7 +157,7 @@
                 };
                 return $http(config).then(function(res){
                     updateView(res);
-                    counterActive = true;
+                    vm.counterActive = true;
                     startcountdown();
                     return wait().then(function(res){
                         $location.url("/highscore");

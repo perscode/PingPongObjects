@@ -1,25 +1,48 @@
-		<div class="col-xl-12">
-			<table class="table">
-				<thead class="thead-inverse">
-					<tr>
-						<th>#</th>
-						<th>Name</th>
-						<th>Wins</th>
-						<th>Losses</th>
-						<th>Games</th>
-                        <th>ELO</th>
-					</tr>
-				</thead>
-				<tbody>
-                    <tr ng-repeat="player in vm.players track by $index">
-                        <th scope="row">{{$index+1}}</th>
-                        <td ng-click="vm.view(player, $index)"><a href="">{{player.name}}</a></td>
-						<td>{{player.wins}}</td>
-						<td>{{player.losses}}</td>
-						<td>{{player.total}}</td>
-                        <td ng-class="{ 'moreThanThousand': player.elo > 1000, 'exactlyThousand': player.elo == 1000, 'lessThanThousand': player.elo < 1000 }">{{player.elo}}</td>
-                        <td ng-if="isadmin"><a href="" ng-click="vm.modify(player)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+<div class="col-xs-12" ng-if="vm.isadmin">
+    <div class="col-xs-4">
+    </div>
+    <div class="col-xs-4">
+        <uib-accordion>
+            <div uib-accordion-group class="panel-default" is-open="vm.isopen">
+                <uib-accordion-heading>
+                    Create new player <i class="fa fa-angle-right" aria-hidden="true" ng-class="{'fa fa-angle-up': vm.isopen, 'fa fa-angle-right': !vm.isopen}"></i>
+                </uib-accordion-heading>
+                <div class="form-group">
+                    <label>Enter name</label>
+                    <input type="text" ng-model="vm.player.name" class="form-control">
+                </div>
+                <button type="button" class="btn btn-default btn-sm" ng-click="vm.newPlayer(vm.player.name)">save</button>
+            </div>
+        </uib-accordion>
+    </div>
+    <div class="col-xs-4">
+    </div>    
+</div>
+<div class="col-xl-12">
+    <table class="table">
+        <thead class="thead-inverse">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Wins</th>
+                <th>Losses</th>
+                <th>Games</th>
+                <th>ELO</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="player in vm.players track by $index">
+                <th scope="row">{{$index+1}}</th>
+                <td ng-click="vm.view(player, $index)">
+                    <img ng-src="/images/players/{{player._id}}.jpg" style="width:40px;height: 40px;border-radius: 100px; margin-right:5px;">
+                    <a href="" ng-if="!player.nickname">{{player.name}}</a>
+                    <a href="" ng-if="player.nickname">{{player.firstname}} "{{player.nickname}}" {{player.lastname}}</a>
+                </td>
+                <td>{{player.wins}}</td>
+                <td>{{player.losses}}</td>
+                <td>{{player.total}}</td>
+                <td ng-class="{ 'moreThanThousand': player.elo > 1000, 'exactlyThousand': player.elo == 1000, 'lessThanThousand': player.elo < 1000 }">{{player.elo}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

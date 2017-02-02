@@ -45,7 +45,7 @@
         /** 
          * Node settings
          */
-        defaultPort: 50000,
+        defaultPort: 3000,
         nodeServer: server + 'app.js'
     };
     config.getWiredepDefaultOptions = function () {

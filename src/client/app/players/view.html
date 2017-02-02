@@ -5,19 +5,29 @@
     <div class="col-xs-10 text-xs-center">
         <div class="w3-card-4" style="width:70%">
             <header class="w3-container w3-light-grey">
-                <h3>{{vm.content.player.name}}</h3>
+                <div ng-if="vm.content.player.nickname">
+                    <h3>{{vm.firstname}} "{{vm.content.player.nickname}}" {{vm.lastname}}</h3>
+                </div>
+                <div ng-if="!vm.content.player.nickname">
+                    <h3>{{vm.content.player.name}}</h3>
+                </div>
+                
             </header>
             <div class="w3-container">
                 <div class="space20"></div>
                 <p><span uib-rating read-only ng-model="vm.stars" max="10" titles="['one','two','three']" aria-labelledby="default-rating"></span></p>
-                <hr>
+                <p ng-if="vm.content.player.quote">
+                    <b>"</b>{{vm.content.player.quote}}<b>"</b>
+                    <hr>
+                </p>
                 <img ng-src="./images/players/{{vm.content.player._id}}.jpg" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+
                 <p>{{vm.content.player.name}} has played a total of {{vm.content.player.total}} games. With an ELO of {{vm.content.player.elo}}, {{vm.firstname}} ends up at
                     <span ng-if="vm.pos===0">the very top of the leaderbaord</span>
-                    <span ng-if="vm.pos>0&&vm.pos<4">an impressive rank of {{vm.pos}} on the leaderboards.</span>
-                    <span ng-if="vm.pos>3&&vm.pos<7">position #{{vm.pos}} and should by no means be considered less of a threat.</span>
-                    <span ng-if="vm.pos>6">position #{{vm.pos}}.</span>
-                    <span ng-if="vm.sharedby > 1">Although we see a total of {{vm.sharedby}} players with the same ELO - a single game can translate to several jumps on the highscore table.</span>
+                    <span ng-if="vm.pos>0&&vm.pos<4">an impressive rank of {{vm.pos+1}} on the leaderboards.</span>
+                    <span ng-if="vm.pos>3&&vm.pos<7">position #{{vm.pos+1}} and should by no means be considered less of a threat.</span>
+                    <span ng-if="vm.pos>6">position #{{vm.pos+1}}.</span>
+                    <span ng-if="vm.sharedby > 1">Although we see a total of {{vm.sharedby}} players with the same ELO - a single game could translate into several jumps on the highscore table.</span>
                     <br>
                     <span ng-if="vm.content.player.losses===0&&vm.content.player.wins>0">
                         Undefeated so far<span ng-if="vm.content.player.wins>3">. With {{vm.content.player.wins}} games won, {{vm.content.player.name}} has received the nickname: "The Unstoppable Force"</span>
